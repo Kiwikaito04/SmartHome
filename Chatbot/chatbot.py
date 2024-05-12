@@ -10,15 +10,22 @@ from Chatbot import training
 
 lemmatizer = WordNetLemmatizer()
 
-intents = json.loads(open('intents.json').read())
 
-words = pickle.load(open('words.pkl', 'rb'))
-classes = pickle.load(open('classes.pkl', 'rb'))
-try:
+def setup_model():
+    global words
+    words = pickle.load(open('words.pkl', 'rb'))
+    global classes
+    classes = pickle.load(open('classes.pkl', 'rb'))
+    global model
     model = load_model('chatbot_model.keras')
+
+
+intents = json.loads(open('intents.json').read())
+try:
+    setup_model()
 except:
     training.Training()
-    model = load_model('chatbot_model.keras')
+    setup_model()
 
 
 def clean_up_sentence(sentence):
